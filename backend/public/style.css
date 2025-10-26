@@ -12,4 +12,8 @@ color: darkgreen;
   main {
  margin-top: 20px;
   }
+
+  body { font-family: system-ui, sans-serif; }
+main { padding: 24px; }
+
   
