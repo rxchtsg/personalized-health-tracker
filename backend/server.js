@@ -14,6 +14,7 @@ db.exec(`
     water_ml INTEGER DEFAULT 0,     -- hydration
     took_iron INTEGER DEFAULT 0,    -- 0/1
     ate_meat INTEGER DEFAULT 0      -- 0/1
+    vitamin_d_iu INTEGER DEFAULT 0  -- Vitamin D supplement in IU
   );
 `);
 
