@@ -1,6 +1,10 @@
 # Personalized Health Tracker
 
+<<<<<<< HEAD
 Very simple site I'm building to track my iron, vitamin d supplement intake/ hydration and overall protein habits.
+=======
+Very simple site I'm building to track my iron + vitamin D supplement intake/water/ (or overall protein) habits.
+>>>>>>> c7f261d (docs: note Day 3 placeholder /habits page)
 Today: set up basic pages (home, habits, about) and nav links.
 Backend + styles will come next days.
 
