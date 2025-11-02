@@ -1,9 +1,13 @@
 body { margin: 0; }
   
-  nav a {
- margin-right: 10px;
- text-decoration: none;
-color: darkgreen;
+  nav a {\\
+    nav a {
+      margin-right: 12px;
+      text-decoration: none;
+      color: #0a7c3a;
+    }
+    nav a:hover { text-decoration: underline; }
+
   }
   
   main {
@@ -14,3 +18,8 @@ color: darkgreen;
   main { padding: 24px; }
 
 .main { max-width: 760px; margin: 24px auto; }
+
+.card { background: #fff; border: 1px solid #e6e6e9; border-radius: 10px; padding: 16px; box-shadow: 0 1px 0 rgba(16,24,40,.04); }
+
+.btn { display: inline-block; padding: 8px 12px; border: 1px solid #d0d0d4; border-radius: 8px; background: #fff; cursor: pointer; }
+.btn.primary { background: #111; color: #fff; border-color: #111; }
