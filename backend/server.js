@@ -30,13 +30,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.get('/', (req, res) => {
     const body = fs.readFileSync(path.join(__dirname, 'views', 'home.ejs'), 'utf8');
     res.render('layout', { title: 'Home', body });
-
+});
  // GET /habits — tiny placeholder page
 app.get('/habits', (req, res) => {
     const body = fs.readFileSync(path.join(__dirname, 'views', 'habits.ejs'), 'utf8');
     res.render('layout', { title: 'Habits', body });
   });
-  });  
 app.listen(PORT, () => {
   console.log(`server on http://localhost:${PORT}`);
 });
