@@ -20,7 +20,6 @@ db.exec(`
     vitamin_d_iu INTEGER DEFAULT 0  -- Vitamin D supplement in IU
   );
 `);
-const listStmt = db.prepare('SELECT day, water_ml, took_iron, ate_meat, vitamin_d_iu FROM habits ORDER BY id DESC LIMIT 10');
 // views + static
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
