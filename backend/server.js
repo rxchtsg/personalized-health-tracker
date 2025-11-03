@@ -2,7 +2,7 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
-const { listStmt } = require('./views/db.js');
+const { allHabits } = require('./views/db.js'); 
 const app = express();
 const PORT = 3000;
 const Database = require('better-sqlite3');
