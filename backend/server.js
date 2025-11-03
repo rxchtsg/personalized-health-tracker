@@ -2,6 +2,7 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
+const { listStmt } = require('./views/db.js');
 const app = express();
 const PORT = 3000;
 const Database = require('better-sqlite3');
@@ -33,9 +34,20 @@ app.get('/', (req, res) => {
 });
  // GET /habits — tiny placeholder page
 app.get('/habits', (req, res) => {
-    const body = fs.readFileSync(path.join(__dirname, 'views', 'habits.ejs'), 'utf8');
-    res.render('layout', { title: 'Habits', body });
-  });
+  const rows = listStmt.all(); // get data from db.js
+
+  // build HTML list from each row
+  const listHtml = rows.map(r =>
+    `<li>${r.day} — water ${r.water_ml || 0}ml, iron ${r.took_iron ? '✓' : '✗'}, meat ${r.ate_meat ? '✓' : '✗'}, vitD ${r.vitamin_d_iu || 0}IU</li>`
+  ).join('');
+
+  // load habits.ejs and inject listHtml where <!-- LIST --> is
+  let body = fs.readFileSync(path.join(__dirname, 'views', 'habits.ejs'), 'utf8');
+  body = body.replace('<!-- LIST -->', `<ul>${listHtml}</ul>`);
+
+  // render layout
+  res.render('layout', { title: 'Habits', body });
+});
 app.listen(PORT, () => {
   console.log(`server on http://localhost:${PORT}`);
 });
