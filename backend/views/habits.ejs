@@ -1,7 +1,38 @@
 <nav>
-    <a href="/">Home</a> | <a href="/habits">Habits</a>
-  </nav>
-  
-  <h1>Habits</h1>
-  <p>Hydration / Iron intake / Meat / Vitamin D — list goes here.</p>
-  
+  <a href="/">Home</a> | <a href="/habits">Habits</a>
+</nav>
+
+<h1>Habits</h1>
+
+<h3>Add New Entry</h3>
+<form action="/habits" method="POST" style="margin-bottom: 20px;">
+    
+    <div style="margin-bottom: 5px;">
+      <label for="day">Day:</label>
+      <input type="date" id="day" name="day" required>
+    </div>
+    
+    <div style="margin-bottom: 5px;">
+      <label for="water">Water (ml):</label>
+      <input type="number" id="water" name="water_ml" value="0">
+    </div>
+
+    <div style="margin-bottom: 5px;">
+      <label for="vit_d">Vitamin D (IU):</label>
+      <input type="number" id="vit_d" name="vitamin_d_iu" value="0">
+    </div>
+    
+    <div style="margin-bottom: 5px;">
+      <input type="checkbox" id="iron" name="took_iron">
+      <label for="iron">Took Iron?</label>
+    </div>
+
+    <div style="margin-bottom: 5px;">
+      <input type="checkbox" id="meat" name="ate_meat">
+      <label for="meat">Ate Meat?</label>
+    </div>
+
+    <button type="submit">Save Today</button>
+</form>
+
+<hr>
