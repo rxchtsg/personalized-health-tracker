@@ -2,23 +2,9 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
+const { allHabits } = require('./views/db.js');
 const app = express();
 const PORT = 3000;
-const Database = require('better-sqlite3');
-const DATA_DIR = path.join(__dirname, 'data');
-if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
-const DB_PATH = path.join(__dirname, 'data', 'journal.db');
-const db = new Database(DB_PATH);
-db.exec(`
-  CREATE TABLE IF NOT EXISTS habits (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    day TEXT NOT NULL,              -- e.g. "2025-10-27"
-    water_ml INTEGER DEFAULT 0,     -- hydration
-    took_iron INTEGER DEFAULT 0,    -- 0/1
-    ate_meat INTEGER DEFAULT 0,      -- 0/1
-    vitamin_d_iu INTEGER DEFAULT 0  -- Vitamin D supplement in IU
-  );
-`);
 // views + static
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -32,8 +18,7 @@ app.get('/', (req, res) => {
 });
  // GET /habits — tiny placeholder page
 app.get('/habits', (req, res) => {
-  // query directly with the db we already opened in this file
-  const rows = db.prepare('SELECT * FROM habits ORDER BY id DESC').all();
+  const rows = allHabits(); 
 
   const listHtml = rows.map(r => {
     const iron = r.took_iron ? '✓' : '✗';
@@ -50,6 +35,3 @@ app.get('/habits', (req, res) => {
 app.listen(PORT, () => {
   console.log(`server on http://localhost:${PORT}`);
 });
-
-
-  
