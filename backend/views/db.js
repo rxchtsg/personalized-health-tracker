@@ -46,4 +46,10 @@ function addHabit(data) {
   `);
   return stmt.run(data);
 }
-module.exports = { allHabits, getHabit, addHabit };
+function deleteHabit(id) {
+  const stmt = db.prepare('DELETE FROM habits WHERE id = ?');
+  return stmt.run(id);
+}
+
+// Add deleteHabit to this list
+module.exports = { allHabits, getHabit, addHabit, deleteHabit };
