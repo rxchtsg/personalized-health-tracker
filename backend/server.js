@@ -1,8 +1,7 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
-const { allHabits, addHabit, deleteHabit } = require('./views/db.js');
-const app = express();
+const { allHabits, addHabit, deleteHabit, getHabit } = require('./views/db.js');const app = express();
 const PORT = 3000;
 
 // views + static
@@ -24,7 +23,10 @@ app.get('/about', (req, res) => {
   const body = fs.readFileSync(path.join(__dirname, 'views', 'about.ejs'), 'utf8');
   res.render('layout', { title: 'About', body });
 });
-
+app.get('/habits/:id/edit', (req, res) => {
+  const habit = getHabit(req.params.id);
+  res.render('edit-habit', { title: 'Edit Habit', habit: habit });
+});
 // GET /habits — show all habits
 app.get('/habits', (req, res) => {
   const rows = allHabits(); 
