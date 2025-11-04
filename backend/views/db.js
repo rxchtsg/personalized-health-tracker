@@ -30,5 +30,11 @@ function allHabits() {
 function getHabit(id) {
   return db.prepare('SELECT * FROM habits WHERE id = ?').get(id);
 }
-
-module.exports = { allHabits, getHabit };
+function addHabit(data) {
+  const stmt = db.prepare(`
+    INSERT INTO habits (day, water_ml, took_iron, ate_meat, vitamin_d_iu)
+    VALUES (@day, @water_ml, @took_iron, @ate_meat, @vitamin_d_iu)
+  `);
+  return stmt.run(data);
+}
+module.exports = { allHabits, getHabit, addHabit };
