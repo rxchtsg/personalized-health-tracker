@@ -32,25 +32,23 @@ app.get('/', (req, res) => {
     res.render('layout', { title: 'Home', body });
 });
  // GET /habits — tiny placeholder page
- app.get('/habits', (req, res) => {
-  // get rows from the DB via helper
-  const rows = allHabits();
+app.get('/habits', (req, res) => {
+  try {
+    const rows = allHabits();           // <-- comes from views/db.js
+    const listHtml = rows.map(r => {
+      const iron = r.took_iron ? '✓' : '✗';
+      const meat = r.ate_meat ? '✓' : '✗';
+      return `<li>${r.day} — water ${r.water_ml || 0}ml, iron ${iron}, meat ${meat}, vitamin D ${r.vitamin_d_iu || 0} IU</li>`;
+    }).join('');
 
-  // make a simple HTML list
-  const listHtml = rows.map(r => {
-    const iron = r.took_iron ? '✓' : '✗';
-    const meat = r.ate_meat ? '✓' : '✗';
-    return `<li>${r.day} — water ${r.water_ml || 0}ml, iron ${iron}, meat ${meat}, vitamin D ${r.vitamin_d_iu || 0} IU</li>`;
-  }).join('');
-
-  // load the view and inject list
-  let body = fs.readFileSync(path.join(__dirname, 'views', 'habits.ejs'), 'utf8');
-  body = body.replace('<!-- LIST -->', `<ul>${listHtml}</ul>`);
-
-  // render via layout
-  res.render('layout', { title: 'Habits', body });
+    let body = fs.readFileSync(path.join(__dirname, 'views', 'habits.ejs'), 'utf8');
+    body = body.replace('<!-- LIST -->', `<ul>${listHtml}</ul>`);
+    res.render('layout', { title: 'Habits', body });
+  } catch (e) {
+    console.error('ERROR in /habits:', e);
+    res.status(500).send('Server error. Check terminal logs.');
+  }
 });
-// TEMP: seed one row so the list has data (visit /seed once)
 app.get('/seed', (req, res) => {
   const stmt = db.prepare(`INSERT INTO habits (day, water_ml, took_iron, ate_meat, vitamin_d_iu)
                            VALUES (date('now'), 1200, 1, 0, 1000)`);
