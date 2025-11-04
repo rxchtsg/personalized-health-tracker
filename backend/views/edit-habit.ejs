@@ -1,0 +1,35 @@
+<nav>
+    <a href="/">Home</a> | <a href="/habits">Habits</a> | <a href="/about">About</a>
+  </nav>
+  
+  <h1>Edit Habit Entry</h1>
+  
+  <form method="POST">
+  
+      <div style="margin-bottom: 5px;">
+        <label for="day">Day:</label>
+        <input type="date" id="day" name="day" value="<%= habit.day %>" required>
+      </div>
+  
+      <div style="margin-bottom: 5px;">
+        <label for="water">Water (ml):</label>
+        <input type="number" id="water" name="water_ml" value="<%= habit.water_ml %>">
+      </div>
+  
+      <div style="margin-bottom: 5px;">
+        <input type="checkbox" id="vit_d" name="vitamin_d_iu" <%= habit.vitamin_d_iu ? 'checked' : '' %>>
+        <label for="vit_d">Took Vitamin D?</label>
+      </div>
+  
+      <div style="margin-bottom: 5px;">
+        <input type="checkbox" id="iron" name="took_iron" <%= habit.took_iron ? 'checked' : '' %>>
+        <label for="iron">Took Iron?</label>
+      </div>
+  
+      <div style="margin-bottom: 5px;">
+        <input type="checkbox" id="meat" name="ate_meat" <%= habit.ate_meat ? 'checked' : '' %>>
+        <label for="meat">Ate Meat?</label>
+      </div>
+  
+      <button type="submit">Save Changes</button>
+  </form>
