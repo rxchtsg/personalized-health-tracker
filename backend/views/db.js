@@ -20,7 +20,16 @@ if (!fs.existsSync(DB_PATH)) {
 
 // open DB
 const db = new Database(DB_PATH);
-
+db.exec(`
+  CREATE TABLE IF NOT EXISTS habits (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    day TEXT NOT NULL,
+    water_ml INTEGER DEFAULT 0,
+    took_iron INTEGER DEFAULT 0,
+    ate_meat INTEGER DEFAULT 0,
+    vitamin_d_iu INTEGER DEFAULT 0
+  );
+`);
 // fetch all rows
 function allHabits() {
   return db.prepare('SELECT * FROM habits ORDER BY id DESC').all();
