@@ -4,6 +4,7 @@ const path = require('path');
 const { allHabits, addHabit, deleteHabit, getHabit, updateHabit } = require('./views/db.js');
 const app = express(); 
 const PORT = 3000;
+
 // views + static
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -23,10 +24,29 @@ app.get('/about', (req, res) => {
   const body = fs.readFileSync(path.join(__dirname, 'views', 'about.ejs'), 'utf8');
   res.render('layout', { title: 'About', body });
 });
+
+// GET /habits/:id/edit - Show the edit form
 app.get('/habits/:id/edit', (req, res) => {
   const habit = getHabit(req.params.id);
   res.render('edit-habit', { title: 'Edit Habit', habit: habit });
 });
+
+// POST /habits/:id/edit - Save the changes
+// THIS IS THE ROUTE YOU WERE MISSING
+app.post('/habits/:id/edit', (req, res) => {
+  const id = req.params.id;
+  const data = {
+    day: req.body.day,
+    water_ml: Number(req.body.water_ml) || 0,
+    vitamin_d_iu: req.body.vitamin_d_iu === 'on' ? 1 : 0,
+    took_iron: req.body.took_iron === 'on' ? 1 : 0,
+    ate_meat: req.body.ate_meat === 'on' ? 1 : 0
+  };
+  
+  updateHabit(id, data);
+  res.redirect('/habits');
+});
+
 // GET /habits — show all habits
 app.get('/habits', (req, res) => {
   const rows = allHabits(); 
@@ -34,23 +54,18 @@ app.get('/habits', (req, res) => {
     const iron = r.took_iron ? '✓' : '✗';
     const meat = r.ate_meat ? '✓' : '✗';
     const vit_d = r.vitamin_d_iu ? '✓' : '✗';
-
-    // This is the new "Edit" link
     const editLink = `<a href="/habits/${r.id}/edit" style="margin-left: 10px;">Edit</a>`;
-
     const deleteForm = `
       <form action="/habits/${r.id}/delete" method="POST" style="display: inline-block; margin-left: 10px;">
         <button type="submit" style="color: red; background: none; border: none; cursor: pointer; padding: 0;">X</button>
       </form>
     `;
-
-    // Add the editLink right before the deleteForm
     return `<li>${r.day} — water ${r.water_ml || 0}ml, iron ${iron}, meat ${meat}, vitamin D ${vit_d} ${editLink} ${deleteForm}</li>`;
   }).join('');
 
   let body = fs.readFileSync(path.join(__dirname, 'views', 'habits.ejs'), 'utf8');
   
-  // THIS LINE IS NOW FIXED
+  // THIS LINE WAS THE OLD BUG. IT IS NOW FIXED.
   body = body.replace('', `<ul>${listHtml}</ul>`);
 
   res.render('layout', { title: 'Habits', body });
@@ -58,8 +73,6 @@ app.get('/habits', (req, res) => {
 
 // POST /habits — save a new habit
 app.post('/habits', (req, res) => {
-  console.log('Got a form submission:', req.body); 
-
   const data = {
     day: req.body.day,
     water_ml: Number(req.body.water_ml) || 0,
