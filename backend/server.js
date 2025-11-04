@@ -19,11 +19,13 @@ app.get('/', (req, res) => {
     res.render('layout', { title: 'Home', body });
 });
 
-// GET /habits — show all habits
+// GET /about — static about page
 app.get('/about', (req, res) => {
   const body = fs.readFileSync(path.join(__dirname, 'views', 'about.ejs'), 'utf8');
   res.render('layout', { title: 'About', body });
 });
+
+// GET /habits — show all habits
 app.get('/habits', (req, res) => {
   const rows = allHabits(); 
   const listHtml = rows.map(r => {
@@ -41,6 +43,7 @@ app.get('/habits', (req, res) => {
   }).join('');
 
   let body = fs.readFileSync(path.join(__dirname, 'views', 'habits.ejs'), 'utf8');
+  
   // THIS LINE IS NOW FIXED
   body = body.replace('', `<ul>${listHtml}</ul>`);
 
