@@ -1,9 +1,0 @@
-# OS junk
-.DS_Store
-
-# Node / backend stuff (Day 2)
-node_modules/
-backend/data/
-*.db
-*.db-journal
-.env

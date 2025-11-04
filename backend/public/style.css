@@ -28,5 +28,5 @@ nav a:hover {
 
 .input, select { width: 100%; padding: 10px 12px; border: 1px solid #d0d0d4; border-radius: 8px; background: #fff; }
 body {
-  background-color: lightpink !important;
+  background-color: rgb(255, 182, 193) !important;
 }
