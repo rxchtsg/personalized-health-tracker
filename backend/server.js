@@ -2,7 +2,6 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
-const { allHabits } = require('./views/db.js');
 const app = express();
 const PORT = 3000;
 const Database = require('better-sqlite3');
@@ -33,28 +32,21 @@ app.get('/', (req, res) => {
 });
  // GET /habits — tiny placeholder page
 app.get('/habits', (req, res) => {
-  try {
-    const rows = allHabits();           // <-- comes from views/db.js
-    const listHtml = rows.map(r => {
-      const iron = r.took_iron ? '✓' : '✗';
-      const meat = r.ate_meat ? '✓' : '✗';
-      return `<li>${r.day} — water ${r.water_ml || 0}ml, iron ${iron}, meat ${meat}, vitamin D ${r.vitamin_d_iu || 0} IU</li>`;
-    }).join('');
+  // query directly with the db we already opened in this file
+  const rows = db.prepare('SELECT * FROM habits ORDER BY id DESC').all();
 
-    let body = fs.readFileSync(path.join(__dirname, 'views', 'habits.ejs'), 'utf8');
-    body = body.replace('<!-- LIST -->', `<ul>${listHtml}</ul>`);
-    res.render('layout', { title: 'Habits', body });
-  } catch (e) {
-    console.error('ERROR in /habits:', e);
-    res.status(500).send('Server error. Check terminal logs.');
-  }
+  const listHtml = rows.map(r => {
+    const iron = r.took_iron ? '✓' : '✗';
+    const meat = r.ate_meat ? '✓' : '✗';
+    return `<li>${r.day} — water ${r.water_ml || 0}ml, iron ${iron}, meat ${meat}, vitamin D ${r.vitamin_d_iu || 0} IU</li>`;
+  }).join('');
+
+  let body = fs.readFileSync(path.join(__dirname, 'views', 'habits.ejs'), 'utf8');
+  body = body.replace('<!-- LIST -->', `<ul>${listHtml}</ul>`);
+
+  res.render('layout', { title: 'Habits', body });
 });
-app.get('/seed', (req, res) => {
-  const stmt = db.prepare(`INSERT INTO habits (day, water_ml, took_iron, ate_meat, vitamin_d_iu)
-                           VALUES (date('now'), 1200, 1, 0, 1000)`);
-  stmt.run();
-  res.redirect('/habits');
-});
+
 app.listen(PORT, () => {
   console.log(`server on http://localhost:${PORT}`);
 });
