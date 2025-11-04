@@ -2,7 +2,7 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
-const { allHabits } = require('./views/db.js'); 
+const { allHabits } = require('./views/db.js');
 const app = express();
 const PORT = 3000;
 const Database = require('better-sqlite3');
@@ -32,20 +32,30 @@ app.get('/', (req, res) => {
     res.render('layout', { title: 'Home', body });
 });
  // GET /habits — tiny placeholder page
-app.get('/habits', (req, res) => {
-  const rows = listStmt.all(); // get data from db.js
+ app.get('/habits', (req, res) => {
+  // get rows from the DB via helper
+  const rows = allHabits();
 
-  // build HTML list from each row
-  const listHtml = rows.map(r =>
-    `<li>${r.day} — water ${r.water_ml || 0}ml, iron ${r.took_iron ? '✓' : '✗'}, meat ${r.ate_meat ? '✓' : '✗'}, vitD ${r.vitamin_d_iu || 0}IU</li>`
-  ).join('');
+  // make a simple HTML list
+  const listHtml = rows.map(r => {
+    const iron = r.took_iron ? '✓' : '✗';
+    const meat = r.ate_meat ? '✓' : '✗';
+    return `<li>${r.day} — water ${r.water_ml || 0}ml, iron ${iron}, meat ${meat}, vitamin D ${r.vitamin_d_iu || 0} IU</li>`;
+  }).join('');
 
-  // load habits.ejs and inject listHtml where <!-- LIST --> is
+  // load the view and inject list
   let body = fs.readFileSync(path.join(__dirname, 'views', 'habits.ejs'), 'utf8');
   body = body.replace('<!-- LIST -->', `<ul>${listHtml}</ul>`);
 
-  // render layout
+  // render via layout
   res.render('layout', { title: 'Habits', body });
+});
+// TEMP: seed one row so the list has data (visit /seed once)
+app.get('/seed', (req, res) => {
+  const stmt = db.prepare(`INSERT INTO habits (day, water_ml, took_iron, ate_meat, vitamin_d_iu)
+                           VALUES (date('now'), 1200, 1, 0, 1000)`);
+  stmt.run();
+  res.redirect('/habits');
 });
 app.listen(PORT, () => {
   console.log(`server on http://localhost:${PORT}`);
