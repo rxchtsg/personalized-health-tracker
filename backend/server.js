@@ -1,9 +1,7 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
-const { allHabits, addHabit, deleteHabit, getHabit } = require('./views/db.js');const app = express();
-const PORT = 3000;
-
+const { allHabits, addHabit, deleteHabit, getHabit, updateHabit } = require('./views/db.js');const PORT = 3000;
 // views + static
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
