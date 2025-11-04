@@ -33,13 +33,17 @@ app.get('/habits', (req, res) => {
     const meat = r.ate_meat ? '✓' : '✗';
     const vit_d = r.vitamin_d_iu ? '✓' : '✗';
 
+    // This is the new "Edit" link
+    const editLink = `<a href="/habits/${r.id}/edit" style="margin-left: 10px;">Edit</a>`;
+
     const deleteForm = `
       <form action="/habits/${r.id}/delete" method="POST" style="display: inline-block; margin-left: 10px;">
         <button type="submit" style="color: red; background: none; border: none; cursor: pointer; padding: 0;">X</button>
       </form>
     `;
 
-    return `<li>${r.day} — water ${r.water_ml || 0}ml, iron ${iron}, meat ${meat}, vitamin D ${vit_d} ${deleteForm}</li>`;
+    // Add the editLink right before the deleteForm
+    return `<li>${r.day} — water ${r.water_ml || 0}ml, iron ${iron}, meat ${meat}, vitamin D ${vit_d} ${editLink} ${deleteForm}</li>`;
   }).join('');
 
   let body = fs.readFileSync(path.join(__dirname, 'views', 'habits.ejs'), 'utf8');
