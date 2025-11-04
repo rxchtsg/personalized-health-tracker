@@ -20,6 +20,10 @@ app.get('/', (req, res) => {
 });
 
 // GET /habits — show all habits
+app.get('/about', (req, res) => {
+  const body = fs.readFileSync(path.join(__dirname, 'views', 'about.ejs'), 'utf8');
+  res.render('layout', { title: 'About', body });
+});
 app.get('/habits', (req, res) => {
   const rows = allHabits(); 
   const listHtml = rows.map(r => {
