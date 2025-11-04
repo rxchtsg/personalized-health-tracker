@@ -1,8 +1,7 @@
-// very small express server for my tracker (Day 2)
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
-const { allHabits, addHabit } = require('./views/db.js');
+const { allHabits, addHabit, deleteHabit } = require('./views/db.js');
 const app = express();
 const PORT = 3000;
 
@@ -14,7 +13,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // --- Routes ---
 
-// home: just a tiny page for now
+// home
 app.get('/', (req, res) => {
     const body = fs.readFileSync(path.join(__dirname, 'views', 'home.ejs'), 'utf8');
     res.render('layout', { title: 'Home', body });
@@ -38,6 +37,7 @@ app.get('/habits', (req, res) => {
   }).join('');
 
   let body = fs.readFileSync(path.join(__dirname, 'views', 'habits.ejs'), 'utf8');
+  // THIS LINE IS NOW FIXED
   body = body.replace('', `<ul>${listHtml}</ul>`);
 
   res.render('layout', { title: 'Habits', body });
@@ -45,7 +45,6 @@ app.get('/habits', (req, res) => {
 
 // POST /habits — save a new habit
 app.post('/habits', (req, res) => {
-  // req.body has the form data
   console.log('Got a form submission:', req.body); 
 
   const data = {
@@ -57,7 +56,13 @@ app.post('/habits', (req, res) => {
   };
   
   addHabit(data);
-  res.redirect('/habits'); // Go back to the habits page
+  res.redirect('/habits'); 
+});
+
+// POST /habits/:id/delete — delete a habit
+app.post('/habits/:id/delete', (req, res) => {
+  deleteHabit(req.params.id);
+  res.redirect('/habits');
 });
 
 // --- Start Server ---
