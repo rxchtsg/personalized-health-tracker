@@ -23,11 +23,18 @@ app.get('/', (req, res) => {
 // GET /habits — show all habits
 app.get('/habits', (req, res) => {
   const rows = allHabits(); 
-
   const listHtml = rows.map(r => {
     const iron = r.took_iron ? '✓' : '✗';
     const meat = r.ate_meat ? '✓' : '✗';
-    return `<li>${r.day} — water ${r.water_ml || 0}ml, iron ${iron}, meat ${meat}, vitamin D ${r.vitamin_d_iu || 0} IU</li>`;
+    const vit_d = r.vitamin_d_iu ? '✓' : '✗';
+
+    const deleteForm = `
+      <form action="/habits/${r.id}/delete" method="POST" style="display: inline-block; margin-left: 10px;">
+        <button type="submit" style="color: red; background: none; border: none; cursor: pointer; padding: 0;">X</button>
+      </form>
+    `;
+
+    return `<li>${r.day} — water ${r.water_ml || 0}ml, iron ${iron}, meat ${meat}, vitamin D ${vit_d} ${deleteForm}</li>`;
   }).join('');
 
   let body = fs.readFileSync(path.join(__dirname, 'views', 'habits.ejs'), 'utf8');
@@ -44,8 +51,7 @@ app.post('/habits', (req, res) => {
   const data = {
     day: req.body.day,
     water_ml: Number(req.body.water_ml) || 0,
-    vitamin_d_iu: Number(req.body.vitamin_d_iu) || 0,
-    // Convert checkbox "on" to 1, or 0 if missing
+    vitamin_d_iu: req.body.vitamin_d_iu === 'on' ? 1 : 0,
     took_iron: req.body.took_iron === 'on' ? 1 : 0,
     ate_meat: req.body.ate_meat === 'on' ? 1 : 0
   };
