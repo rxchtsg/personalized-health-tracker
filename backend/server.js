@@ -25,14 +25,13 @@ app.get('/about', (req, res) => {
   res.render('layout', { title: 'About', body });
 });
 
-// GET /habits/:id/edit - Show the edit form
+// GET /habits/:id/edit - Shows edit form
 app.get('/habits/:id/edit', (req, res) => {
   const habit = getHabit(req.params.id);
   res.render('edit-habit', { title: 'Edit Habit', habit: habit });
 });
 
-// POST /habits/:id/edit - Save the changes
-// THIS IS THE ROUTE YOU WERE MISSING
+// POST /habits/:id/edit - Saves changes
 app.post('/habits/:id/edit', (req, res) => {
   const id = req.params.id;
   const data = {
@@ -47,7 +46,7 @@ app.post('/habits/:id/edit', (req, res) => {
   res.redirect('/habits');
 });
 
-// GET /habits — show all habits
+// GET /habits 
 app.get('/habits', (req, res) => {
   const rows = allHabits(); 
   const listHtml = rows.map(r => {
@@ -65,13 +64,12 @@ app.get('/habits', (req, res) => {
 
   let body = fs.readFileSync(path.join(__dirname, 'views', 'habits.ejs'), 'utf8');
   
-  // THIS LINE WAS THE OLD BUG. IT IS NOW FIXED.
   body = body.replace('', `<ul>${listHtml}</ul>`);
 
   res.render('layout', { title: 'Habits', body });
 });
 
-// POST /habits — save a new habit
+// POST /habits 
 app.post('/habits', (req, res) => {
   const data = {
     day: req.body.day,
@@ -85,7 +83,6 @@ app.post('/habits', (req, res) => {
   res.redirect('/habits'); 
 });
 
-// POST /habits/:id/delete — delete a habit
 app.post('/habits/:id/delete', (req, res) => {
   deleteHabit(req.params.id);
   res.redirect('/habits');

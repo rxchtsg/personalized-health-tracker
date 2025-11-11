@@ -3,22 +3,18 @@ const path = require('path');
 const fs = require('fs');
 const Database = require('better-sqlite3');
 
-// absolute paths (backend/ is one level up from /views)
+// absolute paths 
 const ROOT = path.join(__dirname, '..');        // .../backend
 const DATA_DIR = path.join(ROOT, 'data');       // .../backend/data
 const DB_PATH  = path.join(DATA_DIR, 'journal.db'); // .../backend/data/journal.db
 
-// make sure the directory exists (always)
 fs.mkdirSync(DATA_DIR, { recursive: true });
-// belt-and-suspenders: make sure the parent of DB_PATH exists (it’s the same as DATA_DIR)
 fs.mkdirSync(path.dirname(DB_PATH), { recursive: true });
 
-// OPTIONAL (but removes any edge case): create the empty file if missing
 if (!fs.existsSync(DB_PATH)) {
   fs.closeSync(fs.openSync(DB_PATH, 'a'));
 }
 
-// open DB
 const db = new Database(DB_PATH);
 db.exec(`
   CREATE TABLE IF NOT EXISTS habits (
@@ -30,12 +26,10 @@ db.exec(`
     vitamin_d_iu INTEGER DEFAULT 0
   );
 `);
-// fetch all rows
 function allHabits() {
   return db.prepare('SELECT * FROM habits ORDER BY id DESC').all();
 }
 
-// find single row (keep if you need it)
 function getHabit(id) {
   return db.prepare('SELECT * FROM habits WHERE id = ?').get(id);
 }
@@ -62,5 +56,4 @@ function updateHabit(id, data) {
   `);
   return stmt.run(data, id);
 }
-// Add deleteHabit to this list
 module.exports = { allHabits, getHabit, addHabit, deleteHabit, updateHabit };
