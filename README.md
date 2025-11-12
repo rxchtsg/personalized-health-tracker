@@ -1,5 +1,6 @@
 # Personalized Health Tracker
 Very simple site I'm building to track my iron, vitamin d supplement intake/ hydration and overall protein habits.
+Note: I developed this project iteratively. I wrote the code, ran tests locally, and fixed bugs in small commits. To debug specific problems I consulted documentation, community resources, and used AI assisted debugging for hints, but I implemented, verified and adapted all logic myself. Below are the key milestones and references.
 
 # Day 1:
 - Made basic HTML pages (home, habits, about)
