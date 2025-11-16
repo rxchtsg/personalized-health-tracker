@@ -5,33 +5,26 @@ const { allHabits, addHabit, deleteHabit, getHabit, updateHabit } = require('./d
 const app = express(); 
 const PORT = 3000;
 
-// views + static
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// --- Routes ---
-
-// home
 app.get('/', (req, res) => {
     const body = fs.readFileSync(path.join(__dirname, 'views', 'home.ejs'), 'utf8');
     res.render('layout', { title: 'Home', body });
 });
 
-// GET /about — static about page
 app.get('/about', (req, res) => {
   const body = fs.readFileSync(path.join(__dirname, 'views', 'about.ejs'), 'utf8');
   res.render('layout', { title: 'About', body });
 });
 
-// GET /habits/:id/edit - Shows edit form
 app.get('/habits/:id/edit', async (req, res) => {
   const habit = await getHabit(req.params.id);
   res.render('edit-habit', { title: 'Edit Habit', habit: habit });
 });
 
-// POST /habits/:id/edit - Saves changes
 app.post('/habits/:id/edit', async (req, res) => {
   const id = req.params.id;
   const data = {
@@ -46,7 +39,6 @@ app.post('/habits/:id/edit', async (req, res) => {
   res.redirect('/habits');
 });
 
-// GET /habits 
 app.get('/habits', async (req, res) => {
   const rows = await allHabits(); 
   const listHtml = rows.map(r => {
@@ -69,7 +61,6 @@ app.get('/habits', async (req, res) => {
   res.render('layout', { title: 'Habits', body });
 });
 
-// POST /habits 
 app.post('/habits', async (req, res) => {
   const data = {
     day: req.body.day,
@@ -88,7 +79,6 @@ app.post('/habits/:id/delete',async (req, res) => {
   res.redirect('/habits');
 });
 
-// --- Start Server ---
 app.listen(PORT, () => {
   console.log(`server on http://localhost:${PORT}`);
 });
