@@ -1,7 +1,7 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
-const { allHabits, addHabit, deleteHabit, getHabit, updateHabit } = require('./views/db.js');
+const { allHabits, addHabit, deleteHabit, getHabit, updateHabit } = require('./db.js');
 const app = express(); 
 const PORT = 3000;
 
