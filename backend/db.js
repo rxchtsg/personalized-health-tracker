@@ -26,6 +26,10 @@ function addHabit(data) {
   ];
   return pool.query(sql, values);
 }
+function deleteHabit(id) {
+  const sql = 'DELETE FROM habits WHERE id = $1';
+  return pool.query(sql, [id]);
+}
 module.exports = {
   allHabits,
   getHabit
