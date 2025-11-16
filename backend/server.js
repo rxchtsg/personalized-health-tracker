@@ -26,13 +26,13 @@ app.get('/about', (req, res) => {
 });
 
 // GET /habits/:id/edit - Shows edit form
-app.get('/habits/:id/edit', (req, res) => {
-  const habit = getHabit(req.params.id);
+app.get('/habits/:id/edit', async (req, res) => {
+  const habit = await getHabit(req.params.id);
   res.render('edit-habit', { title: 'Edit Habit', habit: habit });
 });
 
 // POST /habits/:id/edit - Saves changes
-app.post('/habits/:id/edit', (req, res) => {
+app.post('/habits/:id/edit', async (req, res) => {
   const id = req.params.id;
   const data = {
     day: req.body.day,
@@ -42,13 +42,13 @@ app.post('/habits/:id/edit', (req, res) => {
     ate_meat: req.body.ate_meat === 'on' ? 1 : 0
   };
   
-  updateHabit(id, data);
+  await updateHabit(id, data);
   res.redirect('/habits');
 });
 
 // GET /habits 
-app.get('/habits', (req, res) => {
-  const rows = allHabits(); 
+app.get('/habits', async (req, res) => {
+  const rows = await allHabits(); 
   const listHtml = rows.map(r => {
     const iron = r.took_iron ? '✓' : '✗';
     const meat = r.ate_meat ? '✓' : '✗';
@@ -70,7 +70,7 @@ app.get('/habits', (req, res) => {
 });
 
 // POST /habits 
-app.post('/habits', (req, res) => {
+app.post('/habits', async (req, res) => {
   const data = {
     day: req.body.day,
     water_ml: Number(req.body.water_ml) || 0,
@@ -79,12 +79,12 @@ app.post('/habits', (req, res) => {
     ate_meat: req.body.ate_meat === 'on' ? 1 : 0
   };
   
-  addHabit(data);
+  await addHabit(data);
   res.redirect('/habits'); 
 });
 
-app.post('/habits/:id/delete', (req, res) => {
-  deleteHabit(req.params.id);
+app.post('/habits/:id/delete',async (req, res) => {
+  await deleteHabit(req.params.id);
   res.redirect('/habits');
 });
 

@@ -23,6 +23,14 @@ nav a:hover {
 .card { background: #fff; border: 1px solid #e6e6e9; border-radius: 10px; padding: 16px;box-shadow: 0 2px 8px rgba(16,24,40,.08);
 }
 
+h1 {
+  font-size: 35px
+}
+
+@media (max-width: 768px) {
+	h1 { font-size: 25px; }
+}
+
 .btn { display: inline-block; padding: 8px 12px; border: 1px solid #d0d0d4; border-radius: 8px; background: #fff; cursor: pointer; }
 .btn.primary { background: #111; color: #fff; border-color: #111; }
 
@@ -30,3 +38,4 @@ nav a:hover {
 body {
   background-color: rgb(255, 182, 193) !important;
 }
+
