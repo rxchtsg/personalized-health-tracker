@@ -12,6 +12,20 @@ function getHabit(id) {
   const sql = 'SELECT * FROM habits WHERE id = $1';
   return pool.query(sql, [id]).then(result => result.rows[0]);
 }
+function addHabit(data) {
+  const sql = `
+    INSERT INTO habits (day, water_ml, vitamin_d, took_iron, ate_meat)
+    VALUES ($1, $2, $3, $4, $5)
+  `;
+  const values = [
+    data.day,
+    data.water_ml,
+    data.vitamin_d,
+    data.took_iron,
+    data.ate_meat
+  ];
+  return pool.query(sql, values);
+}
 module.exports = {
   allHabits,
   getHabit
