@@ -25,3 +25,6 @@ This is a small site I built to track my iron intake, vitamin D, hydration and g
 - Added a full "Edit" page to **Update** entries.
 - Linked all 3 pages (Home, Habits, About).
 - Deployed the live site to Render.
+  
+# Final reassesment update:
+For this reassessment attempt I basically cleaned everything up and made it feel a lot more like a real project. I swapped out the old SQLite setup and moved everything over to Postgres using Neon, so the data isn’t just living locally anymore. I also added some media breakpoints to make the pages behave better on smaller screens
