@@ -42,17 +42,14 @@ body {
   body {
     font-size: 14px;
   }
-
   nav ul {
     flex-direction: column;
     gap: 6px;
   }
-
   .habits-list li {
     display: block;
     margin-bottom: 10px;
   }
-
   form input,
   form button {
     width: 100%;
